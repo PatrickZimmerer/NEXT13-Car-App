@@ -2,13 +2,13 @@
 import { CarCard, CustomFilter, Hero, SearchBar } from '@/components';
 import ShowMore from '@/components/ShowMore';
 import { fuels, yearsOfProduction } from '@/constants';
-import { FilterProps } from '@/types';
+import { CarProps } from '@/types';
 import { fetchCars } from '@/utils';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-	const [allCars, setAllCars] = useState([]);
+	const [allCars, setAllCars] = useState<CarProps[]>([]);
 	const [loading, setLoading] = useState(false);
 
 	// search states
@@ -44,8 +44,6 @@ export default function Home() {
 		getCars();
 	}, [fuel, year, limit, manufacturer, model]);
 
-	const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
-
 	return (
 		<main className="overflow-hidden">
 			<Hero />
@@ -79,12 +77,11 @@ export default function Home() {
 								/>
 							</div>
 						)}
-						<ShowMore pageNumber={limit / 10} isNext={limit > allCars.length} />
+						<ShowMore pageNumber={limit / 10} isNext={limit > allCars.length} setLimit={setLimit} />
 					</section>
 				) : (
 					<div className="home__error-container">
 						<h2 className="text-black text-xl font-bold">OOPS NO RESULTS</h2>
-						<p>{allCars?.message}</p>
 					</div>
 				)}
 			</div>
